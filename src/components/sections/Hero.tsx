@@ -34,7 +34,7 @@ export default function Hero() {
           y: 0,
           duration: 1.2,
           stagger: 0.1,
-          delay: 0.55,
+          delay: 0.8,
           ease: "expo.out",
         });
       };

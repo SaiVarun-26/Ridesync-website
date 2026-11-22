@@ -1,24 +1,25 @@
 /**
  * Central place for links and brand values.
- * Replace the placeholder URLs before deploying.
+ * Every external link on the site comes from here.
  */
-const github = "https://github.com/your-username/ridesync";
+const repo = "https://github.com/SaiVarun-26/Ridesync";
 
 export const site = {
   name: "RideSync",
   author: "Sai Varun",
-  apkUrl: `${github}/releases/latest`,
-  githubUrl: github,
-  demoUrl: "https://www.youtube.com/watch?v=your-demo-id",
-  // Footer links. Replace the placeholders before deploying.
-  roadmapUrl: `${github}/issues`,
-  faqUrl: `${github}#faq`,
-  docsUrl: `${github}#readme`,
-  changelogUrl: `${github}/releases`,
-  privacyUrl: `${github}/blob/main/PRIVACY.md`,
-  termsUrl: `${github}/blob/main/TERMS.md`,
-  linkedinUrl: "https://www.linkedin.com/in/your-handle",
-  email: "hello@example.com",
+  /** Latest release. The Download buttons open this page. */
+  apkUrl: `${repo}/releases/tag/v1.1.0`,
+  githubUrl: "https://github.com/SaiVarun-26",
+  linkedinUrl: "https://www.linkedin.com/in/saivaruntej/",
+  email: "k.saivaruntej@gmail.com",
+  /** Footer: real pages of the open source repository. */
+  roadmapUrl: `${repo}/issues`,
+  docsUrl: `${repo}#readme`,
+  faqUrl: `${repo}#readme`,
+  changelogUrl: `${repo}/releases`,
+  /** No separate legal pages exist yet, so these open the repository README. */
+  privacyUrl: `${repo}#readme`,
+  termsUrl: `${repo}#readme`,
 } as const;
 
 export const colors = {

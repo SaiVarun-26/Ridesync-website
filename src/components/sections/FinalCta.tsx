@@ -48,13 +48,13 @@ export default function FinalCta() {
     >
       <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-7">
         <img
-          src="/ridesync_mark.png"
+          src="/ridesync_logo.png"
           alt=""
           width={991}
           height={991}
           loading="lazy"
           decoding="async"
-          className="block shrink-0 select-none"
+          className="block shrink-0 select-none object-contain"
           style={{ width: "clamp(52px, 6.4vw, 96px)", height: "auto" }}
         />
         <h2

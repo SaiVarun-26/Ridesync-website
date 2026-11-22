@@ -10,7 +10,6 @@ if (-not (Test-Path $srcPath)) { $srcPath = Join-Path (Get-Location) "screenshot
 $srcPath = (Resolve-Path $srcPath).Path
 
 New-Item public -ItemType Directory -Force | Out-Null
-Copy-Item $srcPath "public\ridesync_logo.png" -Force
 
 $src = [System.Drawing.Bitmap]::FromFile($srcPath)
 
@@ -47,7 +46,8 @@ $dest = New-Object System.Drawing.Rectangle $dx, $dy, $w, $h
 $from = New-Object System.Drawing.Rectangle $minX, $minY, $w, $h
 $g.DrawImage($src, $dest, $from, [System.Drawing.GraphicsUnit]::Pixel)
 $g.Dispose()
-$mark.Save((Join-Path (Get-Location) "public\ridesync_mark.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+# public/ridesync_logo.png is the one logo asset used by the whole site.
+$mark.Save((Join-Path (Get-Location) "public\ridesync_logo.png"), [System.Drawing.Imaging.ImageFormat]::Png)
 Write-Host "mark: $S x $S"
 
 function New-Icon([int]$size, [double]$scale, [string]$bgHex, [string]$out) {

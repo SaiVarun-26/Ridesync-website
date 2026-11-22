@@ -2,13 +2,16 @@ import type { ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
 
+/** Small lift, a soft shadow and a tiny scale. Only transform, opacity and colour move. */
 const base =
   "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[15px] font-medium tracking-tight " +
-  "transition-[transform,background-color,color,border-color] duration-500 ease-[var(--ease-expo)] " +
-  "hover:scale-[1.04] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
+  "transition-[transform,box-shadow,background-color,color,border-color] duration-300 ease-[var(--ease-expo)] " +
+  "hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_10px_24px_-10px_rgba(0,0,0,0.9)] " +
+  "active:translate-y-0 active:scale-[0.98] active:shadow-none " +
+  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:bg-[#8d63ff]",
+  primary: "bg-brand text-white hover:bg-[#8d63ff] hover:shadow-[0_10px_28px_-10px_rgba(124,77,255,0.55)]",
   secondary: "border border-white/25 text-white hover:border-white hover:bg-white hover:text-black",
   ghost: "text-white/80 hover:text-white",
 };

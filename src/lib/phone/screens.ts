@@ -32,9 +32,6 @@ export const SCREENS = [
   { id: "flex_card", file: "flex_card.jpeg", kind: "fade" },
 ] as const;
 
-/** Index of the dark map screenshot shown while the phone lies flat in the intro. */
-export const INTRO_SCREEN = 5;
-
 const urls = import.meta.glob("/screenshots/*.jpeg", {
   eager: true,
   query: "?url",

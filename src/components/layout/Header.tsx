@@ -8,12 +8,12 @@ export function Logo({ className = "", size = 38 }: { className?: string; size?:
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
       <img
-        src="/ridesync_mark.png"
+        src="/ridesync_logo.png"
         alt=""
         width={size}
         height={size}
         decoding="async"
-        className="block shrink-0 select-none"
+        className="block shrink-0 select-none object-contain"
         style={{ width: size, height: size }}
       />
       <span className="text-[17px] font-semibold leading-none tracking-tight">RideSync</span>
@@ -27,7 +27,7 @@ export default function Header() {
   useEffect(() => {
     const el = ref.current!;
     const show = () =>
-      gsap.to(el, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", delay: 0.2 });
+      gsap.to(el, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", delay: 0.45 });
     gsap.set(el, { opacity: 0, y: -16 });
     if (experience.introDone) show();
     window.addEventListener(INTRO_DONE_EVENT, show);
@@ -48,7 +48,7 @@ export default function Header() {
             href={site.apkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white px-4 py-1.5 font-medium text-black transition-transform duration-500 ease-[var(--ease-expo)] hover:scale-105"
+            className="rounded-full bg-white px-4 py-1.5 font-medium text-black transition-[transform,box-shadow] duration-300 ease-[var(--ease-expo)] hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_10px_24px_-10px_rgba(0,0,0,0.9)] active:translate-y-0 active:scale-[0.98]"
           >
             Download
           </a>

@@ -113,7 +113,7 @@ function RouteBackdrop() {
  * Static, non-interactive, and always behind the footer content.
  */
 function Wordmark() {
-  const route = "rgba(150,110,255,0.085)";
+  const route = "rgba(150,110,255,0.07)";
   return (
     <div
       aria-hidden
@@ -134,22 +134,6 @@ function Wordmark() {
       </span>
 
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1600 200" preserveAspectRatio="xMidYMid slice" fill="none">
-        <defs>
-          <filter id="route-glow" x="-10%" y="-60%" width="120%" height="220%">
-            <feGaussianBlur stdDeviation="5" />
-          </filter>
-          <filter id="dot-glow" x="-300%" y="-300%" width="700%" height="700%">
-            <feGaussianBlur stdDeviation="4" />
-          </filter>
-        </defs>
-        {/* Soft glow under the main route */}
-        <path
-          d="M-60 138 C 190 36, 370 198, 570 112 S 900 18, 1110 122 S 1450 196, 1680 66"
-          stroke="rgba(124,77,255,0.06)"
-          strokeWidth="9"
-          strokeLinecap="round"
-          filter="url(#route-glow)"
-        />
         <g stroke={route} strokeWidth="2.5" strokeLinecap="round">
           <path d="M-60 138 C 190 36, 370 198, 570 112 S 900 18, 1110 122 S 1450 196, 1680 66" />
           <path d="M-60 40 C 240 120, 470 10, 760 96 S 1220 180, 1680 120" strokeWidth="1.8" />
@@ -169,14 +153,13 @@ function Wordmark() {
             </g>
           ))}
         </g>
-        {/* Rider dots with a soft glow */}
+        {/* Rider dots */}
         {[
           [452, 150],
           [980, 62],
           [1262, 158],
         ].map(([x, y]) => (
           <g key={`${x}-${y}`}>
-            <circle cx={x} cy={y} r="7" fill="#7c4dff" opacity="0.3" filter="url(#dot-glow)" />
             <circle cx={x} cy={y} r="3" fill="#a07cff" opacity="0.45" />
           </g>
         ))}

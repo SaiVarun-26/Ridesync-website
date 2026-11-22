@@ -29,10 +29,11 @@ export interface PhoneState {
   /** 0..1 purple ambient light around the phone. */
   glow: number;
   /**
-   * 0..1. While below 1 the intro owns the screen: it shows the dark map with
-   * the rider overlay and cross-fades into the normal screen sequence.
+   * 0..1. While 1 the phone is held perfectly still: no float, no idle sway, no
+   * 96% settle. The intro uses it so the screenshot logo stays exactly under the
+   * logo the camera is looking at.
    */
-  reveal: number;
+  lock: number;
   /** 0..1 slow upward drift of the screen content (parallax inside the glass). */
   drift: number;
 }
@@ -50,23 +51,21 @@ export const phone: PhoneState = {
   parallax: 1,
   intro: 0,
   glow: 0,
-  reveal: 1,
+  lock: 0,
   drift: 0,
 };
 
 /**
- * Intro overlay state: a purple rider, its spinning GPS ring and its trail are
- * drawn on top of the phone screen while the phone lies flat.
+ * Where the RideSync logo on the phone's sign-in screen is, in CSS pixels, as
+ * seen through the camera. Written by PhoneStage every frame, read by the intro
+ * so its crisp logo can sit exactly on top of the one inside the app.
  */
-export const introFx = {
-  /** 0..1 rider and ring visibility. */
-  appear: 0,
-  /** 0..1 rider travel along the road. */
-  p: 0,
-  /** 0..1 how much the GPS ring has faded away. */
-  ringFade: 0,
-  /** True while the overlay is drawn. */
-  active: false,
+export const logoTrack = {
+  /** Centre of the logo ring. */
+  x: 0,
+  y: 0,
+  /** Outer diameter of the ring. */
+  d: 0,
 };
 /** Normalised pointer, -1..1. */
 export const pointer = { x: 0, y: 0 };

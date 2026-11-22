@@ -8,6 +8,11 @@ const DEPTH = 0.1;
 const BEVEL = 0.012;
 
 export const PHONE_HEIGHT = BODY_H + BEVEL * 2;
+/** Screen glass size and its distance in front of the phone centre, in model units. */
+const BEZEL = 0.045;
+export const SCREEN_W = BODY_W + BEVEL * 2 - BEZEL * 2;
+export const SCREEN_H = BODY_H + BEVEL * 2 - BEZEL * 2;
+export const FRONT_Z = DEPTH / 2 + BEVEL + 0.0015;
 export const PHONE_WIDTH = BODY_W + BEVEL * 2;
 /** Width / height. The intro morph uses this to match the 3D phone exactly. */
 export const PHONE_ASPECT = PHONE_WIDTH / PHONE_HEIGHT;
@@ -43,17 +48,14 @@ const SCREEN_VERT = /* glsl */ `
  *   fade   outgoing screen drifts up and softens, incoming one settles in
  *          from slightly smaller and blurred
  *   slide  incoming screen slides up over the outgoing one, like switching pages
- * Blur uses mip bias, so it costs nothing extra. A transparent overlay texture
- * (used by the intro rider) is composited on top, then a soft glass reflection.
- * Corners are cut with a signed distance field so the screen matches the body.
+ * Blur uses mip bias, so it costs nothing extra. A soft glass reflection is added
+ * on top. Corners are cut with a signed distance field so the screen matches the body.
  */
 const SCREEN_FRAG = /* glsl */ `
   uniform sampler2D uA;
   uniform sampler2D uB;
-  uniform sampler2D uOverlay;
   uniform float uMix;
   uniform float uKind;
-  uniform float uOverlayAmt;
   uniform float uDimA;
   uniform float uDrift;
   uniform float uShine;
@@ -92,10 +94,6 @@ const SCREEN_FRAG = /* glsl */ `
       col = mix(sa.rgb, sb.rgb, t);
     }
 
-    // Intro overlay (rider, ring, trail), straight alpha.
-    vec4 ov = texture2D(uOverlay, vUv);
-    col = mix(col, ov.rgb, ov.a * uOverlayAmt);
-
     // Glass: a faint diagonal reflection that travels with the phone's rotation.
     float diag = vUv.x * 0.8 + vUv.y * 0.6;
     float band = exp(-pow((diag - uShine) * 5.0, 2.0));
@@ -111,7 +109,7 @@ export interface PhoneModel {
   dispose: () => void;
 }
 
-export function createPhoneModel(initial: THREE.Texture, overlay: THREE.Texture): PhoneModel {
+export function createPhoneModel(initial: THREE.Texture): PhoneModel {
   const group = new THREE.Group();
   const disposables: { dispose: () => void }[] = [];
 
@@ -148,10 +146,8 @@ export function createPhoneModel(initial: THREE.Texture, overlay: THREE.Texture)
     uniforms: {
       uA: { value: initial },
       uB: { value: initial },
-      uOverlay: { value: overlay },
       uMix: { value: 0 },
       uKind: { value: 0 },
-      uOverlayAmt: { value: 0 },
       uDimA: { value: 1 },
       uDrift: { value: 0 },
       uShine: { value: 0.3 },
