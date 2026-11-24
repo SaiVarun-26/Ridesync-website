@@ -9,7 +9,7 @@ export const site = {
   author: "Sai Varun",
   /** Latest release. The Download buttons open this page. */
   apkUrl: `${repo}/releases/tag/v1.1.0`,
-  githubUrl: "https://github.com/SaiVarun-26",
+  githubUrl: "https://github.com/SaiVarun-26/Ridesync",
   linkedinUrl: "https://www.linkedin.com/in/saivaruntej/",
   email: "k.saivaruntej@gmail.com",
   /** Footer: real pages of the open source repository. */
