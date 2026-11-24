@@ -75,7 +75,7 @@ export const chapters = {
     screens: [14],
     eyebrow: "Open source",
     title: "Built by riders. Built for riders.",
-    line: "Flutter · Riverpod · Firebase · OSRM · Photon",
+    line: "Flutter â€¢ Riverpod â€¢ Firebase â€¢ OSRM â€¢ Photon",
   },
 } satisfies Record<string, Chapter>;
 export const cta = {
