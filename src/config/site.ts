@@ -10,16 +10,17 @@ export const site = {
   /** Latest release. The Download buttons open this page. */
   apkUrl: `${repo}/releases/tag/v1.1.0`,
   githubUrl: "https://github.com/SaiVarun-26/Ridesync",
+  /** The author's GitHub profile, used by the footer's Connect column. */
+  profileUrl: "https://github.com/SaiVarun-26",
   linkedinUrl: "https://www.linkedin.com/in/saivaruntej/",
   email: "k.saivaruntej@gmail.com",
   /** Footer: real pages of the open source repository. */
-  roadmapUrl: `${repo}/issues`,
   docsUrl: `${repo}#readme`,
-  faqUrl: `${repo}#readme`,
   changelogUrl: `${repo}/releases`,
-  /** No separate legal pages exist yet, so these open the repository README. */
-  privacyUrl: `${repo}#readme`,
-  termsUrl: `${repo}#readme`,
+  /** Document pages rendered by this site. */
+  privacyUrl: "/privacy",
+  termsUrl: "/terms",
+  faqUrl: "/faq",
 } as const;
 
 export const colors = {

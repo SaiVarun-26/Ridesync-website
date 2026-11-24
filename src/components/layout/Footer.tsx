@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { site } from "@/config/site";
+import { getRoute } from "@/lib/route";
+import { scrollToSection } from "@/lib/scroll";
 import { Logo } from "@/components/layout/Header";
 
 interface FooterLink {
@@ -13,10 +15,8 @@ const columns: { title: string; links: FooterLink[] }[] = [
     title: "Product",
     links: [
       { label: "Features", href: "#home" },
-      { label: "How it Works", href: "#group" },
-      { label: "Download", href: "#download" },
-      { label: "Roadmap", href: site.roadmapUrl },
-      { label: "FAQ", href: site.faqUrl },
+      { label: "How It Works", href: "#group" },
+      { label: "Download", href: site.apkUrl },
     ],
   },
   {
@@ -33,18 +33,36 @@ const columns: { title: string; links: FooterLink[] }[] = [
     title: "Connect",
     links: [
       { label: "LinkedIn", href: site.linkedinUrl },
-      { label: "GitHub", href: site.githubUrl },
+      { label: "GitHub", href: site.profileUrl },
       { label: "Email", href: `mailto:${site.email}` },
-      { label: "Contact", href: `mailto:${site.email}?subject=RideSync` },
+      { label: "Contact", href: "#contact" },
     ],
   },
 ];
 
-function FooterAnchor({ href, children }: { href: string; children: string }) {
+function FooterAnchor({
+  href,
+  children,
+  onHash,
+}: {
+  href: string;
+  children: string;
+  /** True on the home page, where section links scroll in place. */
+  onHash: boolean;
+}) {
   const external = /^https?:/.test(href);
+  const hash = href.startsWith("#");
   return (
     <a
-      href={href}
+      href={hash && !onHash ? `/${href}` : href}
+      onClick={
+        hash && onHash
+          ? (event) => {
+              event.preventDefault();
+              scrollToSection(href.slice(1));
+            }
+          : undefined
+      }
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="relative inline-block text-[15px] text-white/50 transition-colors duration-500 ease-[var(--ease-expo)] hover:text-white
         after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-brand
@@ -169,6 +187,7 @@ function Wordmark() {
 }
 
 export default function Footer() {
+  const onHome = getRoute() === "home";
   const rootRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const colsRef = useRef<HTMLDivElement>(null);
@@ -217,6 +236,7 @@ export default function Footer() {
   return (
     <footer
       ref={rootRef}
+      id="contact"
       className="relative overflow-hidden bg-[#050505] text-white"
       style={{ ["--fs" as string]: "clamp(96px, 17vw, 420px)" }}
     >
@@ -232,7 +252,7 @@ export default function Footer() {
       >
         <div ref={colsRef} className="grid grid-cols-2 gap-x-8 gap-y-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div className="col-span-2 max-w-sm lg:col-span-1">
-            <a href="#top" aria-label="RideSync home" className="inline-block">
+            <a href={onHome ? "#top" : "/"} aria-label="RideSync home" className="inline-block">
               <Logo />
             </a>
             <p className="mt-5 text-[15px] leading-relaxed text-white/55">
@@ -252,7 +272,9 @@ export default function Footer() {
               <ul className="mt-6 space-y-3.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <FooterAnchor href={l.href}>{l.label}</FooterAnchor>
+                    <FooterAnchor href={l.href} onHash={onHome}>
+                      {l.label}
+                    </FooterAnchor>
                   </li>
                 ))}
               </ul>

@@ -1,3 +1,5 @@
+import type Lenis from "lenis";
+
 /**
  * Shared, mutable experience state.
  *
@@ -84,7 +86,7 @@ export function markIntroDone() {
 }
 
 /** Minimal handle on Lenis so the intro can pause scrolling. */
-export const scroller: { lenis: { stop: () => void; start: () => void } | null; locked: boolean } = {
+export const scroller: { lenis: Lenis | null; locked: boolean } = {
   lenis: null,
   locked: false,
 };
