@@ -62,22 +62,66 @@ const desktop: Record<PoseId, Pose> = {
 };
 
 /** Phone above, text below. Used for tablets and phones. */
-const stacked: Record<PoseId, Pose> = {
-  hero: pose({ screen: 0, h: 0.36, parallax: 1 }),
-  home: pose({ screen: 1, y: 0.23, h: 0.41, rotY: -0.3 }),
-  group: pose({ screen: 2, y: 0.23, h: 0.41, rotY: 0.2 }),
-  solo: pose({ screen: 5, y: 0.23, h: 0.41, rotY: -0.3 }),
-  complete: pose({ screen: 10, y: 0.23, h: 0.41, rotY: 0.2 }),
-  history: pose({ screen: 11, y: 0.23, h: 0.41, rotY: -0.3 }),
-  profile: pose({ screen: 13, y: 0.23, h: 0.41, rotY: 0.2 }),
-  flex: pose({ screen: 14, y: 0.23, h: 0.41, rotY: -0.3 }),
-  open: pose({ screen: 14, y: 0.23, h: 0.41, rotY: 0.2 }),
-  cta: pose({ screen: 14, h: 0.26, y: 0.2, rotY: 3.4, rotX: 0.2, opacity: 0, parallax: 0 }),
-};
+const STACKED_H = 0.41;
+const stackedHero = pose({ screen: 0, h: 0.36, parallax: 1 });
+
+/**
+ * Vertical offset for the stacked layout, in viewport fractions (positive is
+ * up). The phone is centred in the band between the fixed navbar and the copy
+ * block, so it keeps equal breathing room above and below on any screen height
+ * and never sits underneath the navbar.
+ *
+ * The band is read from the real layout: the header's measured height and the
+ * tallest copy column (bottom aligned, with the section's 6vh padding), not a
+ * fixed translate that only suits one device.
+ */
+function stackedY(): number {
+  const vh = window.innerHeight || 1;
+  const navH = document.querySelector("header")?.getBoundingClientRect().height ?? 0;
+
+  let copyH = 0;
+  document.querySelectorAll<HTMLElement>("[data-pose] .sticky > div > div").forEach((el) => {
+    copyH = Math.max(copyH, el.getBoundingClientRect().height);
+  });
+  if (!copyH) copyH = vh * 0.28;
+
+  const stage = document.querySelector<HTMLElement>("[data-pose] .sticky");
+  const stageH = stage?.getBoundingClientRect().height || vh;
+  const copyTop = stageH - copyH - vh * 0.06;
+
+  // Equal gaps when the band fits the phone. On very short viewports it cannot,
+  // so the navbar clearance wins over the copy gap instead of hiding the phone.
+  const phoneH = STACKED_H * vh;
+  const gap = Math.min(vh * 0.02, 18);
+  const fits = copyTop - navH - phoneH >= gap * 2;
+  const center = fits ? (navH + copyTop) / 2 : navH + gap + phoneH / 2;
+
+  return (vh / 2 - center) / vh;
+}
+
+/** The showcase poses, with the offset computed from the live layout. */
+function stackedPoses(): Record<PoseId, Pose> {
+  const y = stackedY();
+  const chapter = (screen: number, rotY: number) => pose({ screen, y, h: STACKED_H, rotY });
+
+  return {
+    hero: stackedHero,
+    home: chapter(1, -0.3),
+    group: chapter(2, 0.2),
+    solo: chapter(5, -0.3),
+    complete: chapter(10, 0.2),
+    history: chapter(11, -0.3),
+    profile: chapter(13, 0.2),
+    flex: chapter(14, -0.3),
+    open: chapter(14, 0.2),
+    cta: pose({ screen: 14, h: 0.26, y: 0.2, rotY: 3.4, rotX: 0.2, opacity: 0, parallax: 0 }),
+  };
+}
+
 /** The pose the phone settles into at the end of the intro. */
 export function heroPose() {
   const wide = window.matchMedia("(min-width: 1024px)").matches;
-  return (wide ? desktop : stacked).hero;
+  return wide ? desktop.hero : stackedHero;
 }
 
 function flatten(p: Pose): Pose {
@@ -139,9 +183,9 @@ export function initPhoneScroll() {
     (ctx) => {
       const c = ctx.conditions as Record<string, boolean>;
       if (c.wide) build(desktop, false);
-      else if (c.narrow) build(stacked, false);
+      else if (c.narrow) build(stackedPoses(), false);
       else if (c.wideReduced) build(desktop, true);
-      else build(stacked, true);
+      else build(stackedPoses(), true);
     },
   );
 
